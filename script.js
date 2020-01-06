@@ -7,7 +7,7 @@ let questionData = [];      //取得した問題データ
 
 // ヘッダーの作成
 function createHeader(element,text){
-    let elm = document.createElement(element);
+    const elm = document.createElement(element);
     elm.textContent = text;
     document.getElementById('title').appendChild(elm);
 };
@@ -20,18 +20,18 @@ document.getElementById('startBtn').addEventListener('click', ()=>{
     document.getElementById('startBtn').remove();
     
     fetch('https://opentdb.com/api.php?amount=10')
-        .then((response)=>{
+        .then(response =>{
             if(response.ok){
                 return response.json();
             } else {
                 throw new Error('問題の取得に失敗しました'); 
             }
         })
-        .catch((error)=>{
+        .catch(error =>{
             document.getElementById('title').textContent = error.message;
             document.getElementById('message').textContent = null;
         })
-        .then((apiData)=>{
+        .then(apiData =>{
             questionData = apiData.results;
             questionGenerate();
         });
@@ -39,17 +39,17 @@ document.getElementById('startBtn').addEventListener('click', ()=>{
 
 // 問題文の生成
 function questionGenerate(){
-    let targetArr = questionData[questionNum];
+    const targetArr = questionData[questionNum];
 
     // 問題データの準備
-    let questionTitle =  '問題' + Number(questionNum+1);
-    let category = '[ジャンル] ' + targetArr['category'];
-    let difficulty = '[難易度] ' + targetArr['difficulty'];
-    let question = targetArr['question'];
-    let correct_answer = targetArr['correct_answer'];
-    let answerArr = targetArr['incorrect_answers'];
+    const questionTitle =  '問題' + Number(questionNum+1);
+    const category = '[ジャンル] ' + targetArr['category'];
+    const difficulty = '[難易度] ' + targetArr['difficulty'];
+    const question = targetArr['question'];
+    const correct_answer = targetArr['correct_answer'];
+    const answerArr = targetArr['incorrect_answers'];
     
-    let insertPos = Math.floor(Math.random()*answerArr.length);
+    const insertPos = Math.floor(Math.random()*answerArr.length);
     answerArr.splice(insertPos, 0, correct_answer);
 
     // ヘッダー、問題文の出力
@@ -62,9 +62,9 @@ function questionGenerate(){
     // 選択肢の出力
     questionNum++;
     document.getElementById('choices').textContent = null;
-    for(let i = 0; i < answerArr.length; i++){
-        let ansBtn = document.createElement('button');
-        ansBtn.textContent = answerArr[i];
+    answerArr.forEach(value => {
+        const ansBtn = document.createElement('button');
+        ansBtn.textContent = value;
         ansBtn.addEventListener('click', ()=>{
             if(questionNum < 10){
                 if(event.target.textContent === correct_answer){correctCnt++};
@@ -73,10 +73,10 @@ function questionGenerate(){
                 resultsOutoput();
             }
         });
-        let p = document.createElement('p');
+        const p = document.createElement('p');
         p.appendChild(ansBtn);
         document.getElementById('choices').appendChild(p);
-    };
+    });
 };
 
 // 結果の出力
@@ -84,7 +84,7 @@ function resultsOutoput(){
     document.getElementById('title').textContent = null;
     createHeader('h1', `あなたの正解数は${correctCnt}です！！`);
     document.getElementById('message').textContent = '再度チャレンジしたい場合は以下をクリック！！';
-    let restartBtn = document.createElement('button');
+    const restartBtn = document.createElement('button');
     restartBtn.textContent = 'ホームに戻る';
     restartBtn.addEventListener('click', ()=>{
         location.reload();
