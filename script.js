@@ -3,7 +3,7 @@
 // グローバル変数
 let correctCnt = 0;         //正解数
 let questionNum = 0;        //問題番号
-let questionData = [];      //取得した問題データ
+// let questionData = [];      //取得した問題データ
 
 // ヘッダーの作成
 function createHeader(element,text){
@@ -32,13 +32,13 @@ document.getElementById('startBtn').addEventListener('click', ()=>{
             document.getElementById('message').textContent = null;
         })
         .then(apiData =>{
-            questionData = apiData.results;
-            questionGenerate();
+            const questionData = apiData.results;
+            questionGenerate(questionData);
         });
 });
 
 // 問題文の生成
-function questionGenerate(){
+function questionGenerate(questionData){
     const targetArr = questionData[questionNum];
 
     // 問題データの準備
@@ -51,6 +51,7 @@ function questionGenerate(){
     
     const insertPos = Math.floor(Math.random()*answerArr.length);
     answerArr.splice(insertPos, 0, correct_answer);
+
 
     // ヘッダー、問題文の出力
     document.getElementById('title').textContent = null;
@@ -68,7 +69,7 @@ function questionGenerate(){
         ansBtn.addEventListener('click', ()=>{
             if(questionNum < 10){
                 if(event.target.textContent === correct_answer){correctCnt++};
-                questionGenerate();
+                questionGenerate(questionData);
             } else {
                 resultsOutoput();
             }
